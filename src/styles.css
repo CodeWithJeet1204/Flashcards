@@ -22,3 +22,15 @@
     @apply rounded shadow p-4 bg-white dark:bg-slate-800 dark:text-white;
   }
 }
+
+body {
+  font-family: theme("fontFamily.sans");
+}
+
+button {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.card-box {
+  @apply rounded-lg shadow-lg bg-white dark:bg-slate-800 dark:text-white p-4;
+}

@@ -1,0 +1,10 @@
+{
+    "deno.enable": false,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "tailwindCSS.includeLanguages": {
+      "plaintext": "html",
+      "typescript": "javascript",
+      "typescriptreact": "javascript"
+    },
+    "css.validate": false
+}

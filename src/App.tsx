@@ -7,12 +7,15 @@ import DarkModeToggle from "./components/DarkModeToggle";
 import XPProgressRing from "./components/XPProgressRing";
 import ParallaxBackground from "./components/ParallaxBackground";
 import SettingsToggle from "./components/SettingsToggle";
+import DeckGenerator from "./components/DeckGenerator";
 
 export default function App() {
   const [cards, setCards] = useState<Card[]>(() => {
     const saved = localStorage.getItem("cards");
     return saved ? JSON.parse(saved) : sampleDeck;
   });
+
+  const [showGenerator, setShowGenerator] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("cards", JSON.stringify(cards));
@@ -38,18 +41,38 @@ export default function App() {
       ) : (
         <div className="h-screen flex flex-col items-center justify-center text-center text-xl text-slate-600 dark:text-slate-400">
           <p className="mb-6">You’ve completed today’s reviews ✨</p>
-          <button
-            onClick={() => {
-              const reset = cards.map((card) => ({
-                ...card,
-                due: Date.now() - 1000,
-              }));
-              setCards(reset);
+          <div className="flex gap-4">
+            <button
+              onClick={() => {
+                const reset = cards.map((card) => ({
+                  ...card,
+                  due: Date.now() - 1000,
+                }));
+                setCards(reset);
+              }}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-lg transition"
+            >
+              🔁 Restart
+            </button>
+            <button
+              onClick={() => setShowGenerator(true)}
+              className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-full text-lg transition"
+            >
+              📥 Generate New Deck
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showGenerator && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+          <DeckGenerator
+            onSave={(newDeck: Card[]) => {
+              setCards(newDeck);
+              setShowGenerator(false);
             }}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-lg transition"
-          >
-            🔁 Restart
-          </button>
+            onCancel={() => setShowGenerator(false)}
+          />
         </div>
       )}
     </div>

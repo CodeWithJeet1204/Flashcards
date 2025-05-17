@@ -1,0 +1,92 @@
+/* Tailwind Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== GLOBAL STYLES ========== */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  background-color: theme('colors.slate.50');
+}
+
+* {
+  box-sizing: border-box;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: theme("fontFamily.sans");
+}
+
+button {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+/* ========== CUSTOM GLOW CLASSES ========== */
+.glow-green {
+  background: radial-gradient(circle, #4ade80, transparent 70%);
+}
+
+.glow-red {
+  background: radial-gradient(circle, #f87171, transparent 70%);
+}
+
+/* ========== CUSTOM ANIMATIONS ========== */
+@keyframes bounceUp {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes tilt {
+  0%, 100% {
+    transform: rotate(-1deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+}
+
+.animate-bounce-up {
+  animation: bounceUp 0.5s ease;
+}
+
+.animate-tilt {
+  animation: tilt 1.2s ease-in-out infinite;
+}
+
+/* ========== CUSTOM UTILITIES ========== */
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
+
+/* ========== COMPONENT STYLES ========== */
+@layer components {
+  .card-box {
+    @apply rounded-lg shadow-lg bg-white dark:bg-slate-800 dark:text-white p-4;
+  }
+}

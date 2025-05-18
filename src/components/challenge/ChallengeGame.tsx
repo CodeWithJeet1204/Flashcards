@@ -195,7 +195,7 @@ export default function ChallengeGame() {
             const isCorrect = opt === current.back;
             const isWrongSelected = selectedAnswer === opt && !isCorrect;
 
-            const base = "py-4 px-5 text-lg font-semibold rounded-full transition-all duration-200";
+            const base = "py-4 px-5 text-lg font-semibold rounded-[12px] transition-all duration-200";
             const defaultStyle = "bg-white/10 hover:scale-105 hover:shadow-orange-500/50";
             const correctStyle = "bg-green-600";
             const wrongStyle = "bg-red-500";

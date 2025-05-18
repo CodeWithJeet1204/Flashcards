@@ -12,19 +12,28 @@ export default function IntroModal() {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-slate-800 dark:text-white max-w-md w-full p-6 rounded-lg shadow-xl text-center">
-        <h2 className="text-2xl font-bold mb-2">🧠 Welcome to VibeCards!</h2>
-        <p className="text-sm mb-4">
-          Learn smarter, not harder. Tap a card to flip it, then rate how well
-          you remembered. The app adapts to boost your retention!
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all">
+      <div className="relative bg-white/10 backdrop-blur-xl text-white p-8 sm:p-10 rounded-3xl shadow-2xl max-w-md w-full text-center border border-white/10 scale-95 animate-fadeIn">
+        <h2 className="text-4xl font-extrabold mb-4 tracking-tight drop-shadow-md">
+          🎉 Welcome to{" "}
+          <span className="bg-gradient-to-tr from-orange-400 to-orange-600 text-transparent bg-clip-text">
+            VibeCards
+          </span>
+          !
+        </h2>
+
+        <p className="text-base text-slate-300 mb-6 leading-relaxed">
+          Your memory upgrade starts now. Flip flashcards. Track your brain. Train smarter. 💡
         </p>
+
         <button
-          className="mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
           onClick={() => setShow(false)}
+          className="px-6 py-3 rounded-full bg-gradient-to-tr from-orange-400 to-orange-600 text-white font-bold text-sm shadow-lg hover:scale-105 transition-all"
         >
           Let’s Go 🚀
         </button>
+
+        <div className="absolute top-0 left-0 w-full h-full rounded-3xl border border-white/10 pointer-events-none" />
       </div>
     </div>
   );

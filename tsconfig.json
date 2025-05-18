@@ -12,5 +12,5 @@
     "noEmit": true,
     "types": ["vite/client", "vitest/globals"]
   },
-  "include": ["src", "src/types.d.ts"]
+  "include": ["src", "src/types.d.ts", "supabase/functions/startChallenge.ts"]
 }

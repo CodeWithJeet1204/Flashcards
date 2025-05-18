@@ -9,6 +9,7 @@ import { Howl } from "howler";
 type Props = {
   card: Card;
   onReview: (updated: Card) => void;
+  onExit?: () => void;
 };
 
 const sounds = {
@@ -17,7 +18,7 @@ const sounds = {
   fail: new Howl({ src: ["/sounds/fail.mp3"] }),
 };
 
-export default function Flashcard({ card, onReview }: Props) {
+export default function Flashcard({ card, onReview, onExit }: Props) {
   const [revealed, setRevealed] = useState(false);
   const [glow, setGlow] = useState("");
   const [rewarded, setRewarded] = useState(false);
@@ -98,7 +99,8 @@ export default function Flashcard({ card, onReview }: Props) {
   function handleReview(remembered: boolean) {
     const quality = remembered ? 5 : 2;
     const updated = review(card, quality);
-    setGlow(remembered ? "glow-green" : "glow-red");
+    setGlow(remembered ? "bg-green-500/40" : "bg-red-500/40");
+
     if (remembered) {
       playSound("success");
       confetti();
@@ -108,6 +110,7 @@ export default function Flashcard({ card, onReview }: Props) {
     } else {
       playSound("fail");
     }
+
     setTimeout(() => {
       setRevealed(false);
       setGlow("");
@@ -117,10 +120,10 @@ export default function Flashcard({ card, onReview }: Props) {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen pt-24 px-4 relative">
+    <div className="flex flex-col justify-center items-center min-h-screen pt-24 px-4 relative bg-[#0a0a23] text-white">
       {glow && (
         <div
-          className={`absolute z-10 w-[30rem] h-[30rem] blur-2xl rounded-full opacity-40 transition-all duration-500 ${glow}`}
+          className={`absolute z-10 w-[30rem] h-[30rem] rounded-full blur-3xl transition-all duration-500 pointer-events-none ${glow}`}
         />
       )}
       {rewarded && (
@@ -128,54 +131,72 @@ export default function Flashcard({ card, onReview }: Props) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: -100 }}
           exit={{ opacity: 0 }}
-          className="absolute z-20 text-5xl animate-bounce-up"
+          className="absolute z-30 text-6xl animate-bounce-up"
         >
           🌟
         </motion.div>
       )}
+
+      {onExit && (
+        <button
+          onClick={onExit}
+          className="absolute top-16 left-4 z-40 px-5 py-2 text-sm bg-white/10 backdrop-blur-md hover:scale-105 transition rounded-full shadow-md"
+        >
+          ← Exit Review
+        </button>
+      )}
+
       <AnimatePresence mode="wait">
         <animated.div
           key={card.id + (revealed ? "-back" : "-front")}
           {...bind()}
           style={style}
-          className={`z-20 w-full max-w-xl h-80 sm:h-96 md:h-[28rem] flex items-center justify-center text-2xl font-semibold text-center p-6 rounded-xl shadow-xl
-            ${glass ? "bg-white/10 backdrop-blur-lg dark:bg-slate-200/10" : "bg-white dark:bg-slate-800"}
-            transition-colors duration-700 hover:animate-tilt cursor-pointer`}
+          className={`z-20 w-full max-w-xl h-80 sm:h-96 md:h-[28rem] flex items-center justify-center text-2xl font-semibold text-center p-6 rounded-3xl transition-all duration-700 cursor-pointer hover:scale-105 shadow-2xl
+            ${
+              glass
+                ? "bg-white/10 backdrop-blur-xl"
+                : "bg-slate-900 border border-white/10"
+            }`}
         >
           {revealed ? card.back : card.front}
         </animated.div>
       </AnimatePresence>
 
       {revealed ? (
-        <div className="z-30 flex flex-col gap-4 mt-10 items-center">
+        <div className="z-30 flex flex-col gap-4 mt-10 items-center w-full max-w-xl">
           <div className="flex gap-4">
             <button
               onClick={() => handleReview(false)}
-              className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg animate-bounce-up"
+              className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-lg transition-all font-bold"
             >
               Not Remembered
             </button>
             <button
               onClick={() => handleReview(true)}
-              className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg animate-bounce-up"
+              className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg transition-all font-bold"
             >
               Remembered
             </button>
           </div>
+
           {!loading && !explanation && (
             <button
               onClick={getExplanation}
-              className="mt-2 text-sm text-blue-500 hover:text-blue-700 font-medium underline underline-offset-4 transition-all"
+              className="mt-3 text-sm text-orange-400 hover:text-orange-500 underline underline-offset-4"
             >
               💡 Explain This
             </button>
           )}
-          {loading && <div className="text-sm text-gray-400 mt-2">Thinking...</div>}
+
+          {loading && <p className="text-sm text-slate-400 mt-2">Thinking...</p>}
+
           {explanation && (
             <div className="mt-4 max-h-40 overflow-y-auto px-4">
-              <div className="bg-white dark:bg-slate-800 p-4 rounded-lg text-sm shadow-lg text-left">
+              <div className="bg-white/5 p-4 rounded-xl text-sm text-left shadow-md backdrop-blur">
                 {explanation.split("\n").map((line, i) => (
-                  <p key={i} className="mb-2">{line}</p>
+                  <p key={i} className="mb-2 leading-snug">
+                    {line}
+                  </p>
                 ))}
               </div>
             </div>
@@ -187,7 +208,7 @@ export default function Flashcard({ card, onReview }: Props) {
             playSound("flip");
             setRevealed(true);
           }}
-          className="z-30 mt-10 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition shadow-lg"
+          className="z-30 mt-10 px-6 py-3 bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform"
         >
           Reveal
         </button>

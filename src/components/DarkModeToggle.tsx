@@ -26,15 +26,16 @@ export default function DarkModeToggle() {
       <div className="absolute top-4 right-4 z-50">
         <button
           onClick={toggle}
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md text-xl"
+          aria-label="Toggle Dark Mode"
+          title="Toggle Dark Mode"
+          className="w-11 h-11 flex items-center justify-center rounded-full bg-white/20 dark:bg-white/10 text-black dark:text-white shadow-xl backdrop-blur-lg hover:scale-110 active:scale-95 transition-all duration-200"
         >
-          {dark ? "☀️" : "🌙"}
+          <span className="text-xl">{dark ? "☀️" : "🌙"}</span>
         </button>
       </div>
 
-      {/* Blur light flash on toggle */}
       {animating && (
-        <div className="fixed top-4 right-4 w-72 h-72 rounded-full bg-white/10 dark:bg-slate-500/10 backdrop-blur-sm z-40 pointer-events-none animate-blurFade origin-top-right" />
+        <div className="fixed top-3 right-3 w-20 h-20 rounded-full bg-orange-400/20 dark:bg-blue-400/20 backdrop-blur-xl z-40 pointer-events-none animate-ping" />
       )}
     </>
   );

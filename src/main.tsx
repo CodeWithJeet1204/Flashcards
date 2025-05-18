@@ -2,9 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import SelectDeck from "./components/SelectDeck";
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+const path = window.location.pathname;
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    {path === "/singleplayer" ? <SelectDeck /> : <App />}
   </React.StrictMode>
 );

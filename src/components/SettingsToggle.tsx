@@ -17,22 +17,35 @@ export default function SettingsToggle() {
     const next = !glass;
     localStorage.setItem("glass", next.toString());
     setGlass(next);
-    window.dispatchEvent(new Event("settings-updated")); // 🔄 instant sync
+    window.dispatchEvent(new Event("settings-updated"));
   };
 
   const toggleSound = () => {
     const next = !sound;
     localStorage.setItem("sound", next.toString());
     setSound(next);
-    window.dispatchEvent(new Event("settings-updated")); // 🔄 instant sync
+    window.dispatchEvent(new Event("settings-updated"));
   };
 
   return (
-    <div className="absolute top-4 left-4 z-50 flex gap-3 px-3 py-2 rounded-full bg-white/80 dark:bg-slate-800/80 shadow-md text-sm font-medium items-center backdrop-blur">
-      <button onClick={toggleGlass} className="flex items-center gap-1 hover:scale-105 transition-transform">
+    <div className="fixed top-4 left-4 z-50 flex items-center gap-3 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-semibold text-white shadow-xl border border-white/10 animate-[pulse_20s_ease-in-out_infinite]">
+      <button
+        onClick={toggleGlass}
+        className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all duration-200 ${
+          glass ? "bg-blue-500/20 ring-1 ring-blue-400" : "hover:bg-white/10"
+        }`}
+      >
         🧊 Blur: <span>{glass ? "ON" : "OFF"}</span>
       </button>
-      <button onClick={toggleSound} className="flex items-center gap-1 hover:scale-105 transition-transform">
+
+      <span className="w-[1px] h-5 bg-white/20" />
+
+      <button
+        onClick={toggleSound}
+        className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all duration-200 ${
+          sound ? "bg-green-500/20 ring-1 ring-green-400" : "hover:bg-white/10"
+        }`}
+      >
         {sound ? "🔊" : "🔇"} Sound: <span>{sound ? "ON" : "OFF"}</span>
       </button>
     </div>

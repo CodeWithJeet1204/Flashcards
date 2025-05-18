@@ -11,12 +11,17 @@ const supabase = createClient(
 export default function HomePage() {
   const navigate = useNavigate();
 
+  // Navigate to Singleplayer page
   const goToSingleplayer = () => navigate("/singleplayer");
 
+  // Initialize multiplayer challenge session and navigate to lobby
   const goToMultiplayer = async () => {
     const sessionId = uuidv4();
-    const userId = localStorage.getItem("uid") || uuidv4();
-    localStorage.setItem("uid", userId);
+    let userId = localStorage.getItem("uid");
+    if (!userId) {
+      userId = uuidv4();
+      localStorage.setItem("uid", userId);
+    }
 
     const { error } = await supabase.rpc("create_challenge_session", {
       session_id: sessionId,
@@ -34,12 +39,14 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a23] text-white flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Ambient glow layer */}
+
+      {/* Ambient Glow Background */}
       <div className="absolute inset-0 z-0 bg-gradient-radial from-[#004aad]/30 via-[#2fb2ff]/10 to-[#002f6e]/40 opacity-30 blur-2xl animate-[pulse_20s_ease-in-out_infinite]" />
 
-      {/* Card container */}
+      {/* Main Card */}
       <div className="z-10 w-full max-w-md px-8 py-10 bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 text-center">
-        {/* Header */}
+
+        {/* Header Section */}
         <div className="mb-6">
           <div className="flex items-center justify-center gap-2 mb-3 animate-pulse text-[#2fb2ff]">
             <Sparkles className="w-6 h-6" />
@@ -71,7 +78,7 @@ export default function HomePage() {
         </div>
 
         {/* Footer Note */}
-        <p className="mt-6 text-xs text-slate-500">
+        <p className="mt-6 text-xs text-slate-500 select-none">
           Built with ❤️ at Hackathon
         </p>
       </div>

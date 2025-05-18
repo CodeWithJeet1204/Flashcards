@@ -4,14 +4,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 
 // Singleplayer Mode
-import SelectDeck from "./components/SelectDeck";
+import SelectDeck from "./components/deck/SelectDeck";
 import Singleplayer from "./pages/SinglePlayer";
-import DeckGeneratorPage from "./components/DeckGeneratorPage";
+import DeckGeneratorPage from "./components/deck/DeckGeneratorPage";
 
 // Multiplayer Challenge
-import ChallengeLobby from "./components/ChallengeLobby";
-import ChallengeGame from "./components/ChallengeGame";
-import ChallengeResults from "./components/ChallengeResults";
+import ChallengeLobby from "./components/challenge/ChallengeLobby";
+import ChallengeGame from "./components/challenge/ChallengeGame";
+import ChallengeResults from "./components/challenge/ChallengeResults";
 
 export default function App() {
   return (

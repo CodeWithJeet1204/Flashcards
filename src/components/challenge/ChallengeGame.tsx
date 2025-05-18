@@ -2,53 +2,53 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flame, Clock } from "lucide-react";
+import { Clock } from "lucide-react";
 
+// Supabase client
 const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL!,
-  import.meta.env.VITE_SUPABASE_ANON_KEY!
+  import.meta.env.VITE_SUPABASE_URL || "",
+  import.meta.env.VITE_SUPABASE_ANON_KEY || ""
 );
 
 export default function ChallengeGame() {
   const { id: sessionId } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const userId = localStorage.getItem("uid") ?? "";
 
-  const [userId] = useState<string | undefined>(() => localStorage.getItem("uid") ?? undefined);
   const [deck, setDeck] = useState<any[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answered, setAnswered] = useState(false);
-  const [feedback, setFeedback] = useState("");
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState("");
   const [cardEndTime, setCardEndTime] = useState<Date | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [playersOnline, setPlayersOnline] = useState<string[]>([]);
 
   const channelRef = useRef<any>(null);
-  const cleanSessionId = sessionId?.split(":")[0] || "";
+  const cleanSessionId = sessionId?.split(":")[0] ?? "";
 
+  // Fetch session data
   useEffect(() => {
     const fetchSession = async () => {
-      const { data: session, error } = await supabase
+      const { data, error } = await supabase
         .from("challenge_sessions")
         .select("deck_runtime, current_index, card_end_time")
         .eq("id", cleanSessionId)
         .single();
 
-      if (error || !session) {
-        console.error("❌ Load failed:", error);
-        return;
-      }
+      if (error || !data) return console.error("❌ Load failed:", error);
 
-      setDeck(session.deck_runtime || []);
-      setCurrentIndex(session.current_index);
-      setCardEndTime(new Date(session.card_end_time));
+      setDeck(data.deck_runtime || []);
+      setCurrentIndex(data.current_index);
+      setCardEndTime(new Date(data.card_end_time));
     };
 
     fetchSession();
   }, [cleanSessionId]);
 
+  // Setup Realtime Presence + Broadcast
   useEffect(() => {
-    const setup = async () => {
+    const setupChannel = async () => {
       const channel = supabase.channel(`challenge:${cleanSessionId}`, {
         config: { presence: { key: userId } },
       });
@@ -61,8 +61,8 @@ export default function ChallengeGame() {
           setCurrentIndex(payload.index);
           setCardEndTime(new Date(payload.card_end_time));
           setAnswered(false);
-          setFeedback("");
           setSelectedAnswer(null);
+          setFeedback("");
         })
         .on("presence", { event: "sync" }, () => {
           const state = channel.presenceState();
@@ -73,22 +73,18 @@ export default function ChallengeGame() {
       channelRef.current = channel;
     };
 
-    setup();
-
+    setupChannel();
     return () => {
-      if (channelRef.current) {
-        supabase.removeChannel(channelRef.current);
-      }
+      if (channelRef.current) supabase.removeChannel(channelRef.current);
     };
   }, [cleanSessionId, userId]);
 
+  // Countdown Timer Logic
   useEffect(() => {
     if (!cardEndTime) return;
 
     const interval = setInterval(async () => {
-      const now = Date.now();
-      const end = cardEndTime.getTime();
-      const remaining = Math.max(0, Math.floor((end - now) / 1000));
+      const remaining = Math.max(0, Math.floor((cardEndTime.getTime() - Date.now()) / 1000));
       setTimeLeft(remaining);
 
       if (remaining <= 0) {
@@ -97,25 +93,19 @@ export default function ChallengeGame() {
 
         await supabase
           .from("challenge_sessions")
-          .update({
-            current_index: nextIndex,
-            card_end_time: nextEnd.toISOString(),
-          })
+          .update({ current_index: nextIndex, card_end_time: nextEnd.toISOString() })
           .eq("id", cleanSessionId);
 
         setCurrentIndex(nextIndex);
         setCardEndTime(nextEnd);
         setAnswered(false);
-        setFeedback("");
         setSelectedAnswer(null);
+        setFeedback("");
 
         channelRef.current.send({
           type: "broadcast",
           event: "next_card",
-          payload: {
-            index: nextIndex,
-            card_end_time: nextEnd.toISOString(),
-          },
+          payload: { index: nextIndex, card_end_time: nextEnd.toISOString() },
         });
       }
     }, 1000);
@@ -123,22 +113,23 @@ export default function ChallengeGame() {
     return () => clearInterval(interval);
   }, [cardEndTime, currentIndex, cleanSessionId]);
 
+  // Handle Answer Selection
   const handleAnswer = async (selected: string) => {
     if (answered || currentIndex >= deck.length || timeLeft <= 0) return;
     setAnswered(true);
+    setSelectedAnswer(selected);
 
     const current = deck[currentIndex];
-    const correct = current.back === selected;
+    const isCorrect = current.back === selected;
 
-    setFeedback(correct ? "✅" : "❌");
-    setSelectedAnswer(selected);
+    setFeedback(isCorrect ? "" : "❌");
 
     const { error } = await supabase.from("challenge_answers").upsert(
       {
         session_id: sessionId,
         player_id: userId,
         card_index: currentIndex,
-        is_correct: correct,
+        is_correct: isCorrect,
         ms: 1000,
       },
       {
@@ -149,32 +140,31 @@ export default function ChallengeGame() {
 
     if (error && error.code !== "409") {
       console.error("❌ Insert error:", error.message, error.details);
-    } else {
-      console.log("✅ Insert succeeded or ignored (409)");
     }
 
     channelRef.current.send({
       type: "broadcast",
       event: "answer_selected",
-      payload: { player_id: userId, selected, correct, card_index: currentIndex },
+      payload: { player_id: userId, selected, correct: isCorrect, card_index: currentIndex },
     });
   };
 
+  // Redirect to results if deck completed
   useEffect(() => {
-    if (deck.length > 0 && currentIndex >= deck.length) {
+    if (deck.length && currentIndex >= deck.length) {
       navigate(`/challenge/${sessionId}/results`);
     }
   }, [currentIndex, deck.length, navigate, sessionId]);
 
-  if (!deck[currentIndex]) {
+  const current = deck[currentIndex];
+  if (!current) {
     return <p className="text-center mt-10 text-white text-lg">🔄 Loading game...</p>;
   }
-
-  const current = deck[currentIndex];
 
   return (
     <div className="min-h-screen bg-[#0a0a23] text-white flex flex-col items-center justify-center px-6 py-10">
       <div className="w-full max-w-6xl space-y-8">
+        {/* Header */}
         <div className="text-center">
           <p className="text-slate-400 text-lg">
             <Clock className="inline mr-2 w-5 h-5" />
@@ -185,6 +175,7 @@ export default function ChallengeGame() {
           </p>
         </div>
 
+        {/* Question Card */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -198,6 +189,7 @@ export default function ChallengeGame() {
           </motion.div>
         </AnimatePresence>
 
+        {/* Options Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
           {current.options.map((opt: string, i: number) => {
             const isCorrect = opt === current.back;
@@ -230,6 +222,7 @@ export default function ChallengeGame() {
           })}
         </div>
 
+        {/* Feedback */}
         {feedback && (
           <div className="text-center mt-6 text-5xl animate-bounce">{feedback}</div>
         )}

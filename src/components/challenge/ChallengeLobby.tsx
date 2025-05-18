@@ -3,9 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { createClient, RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 import { ClipboardCopy, Check } from "lucide-react";
 
+// Supabase client
 const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL!,
-  import.meta.env.VITE_SUPABASE_ANON_KEY!
+  import.meta.env.VITE_SUPABASE_URL || "",
+  import.meta.env.VITE_SUPABASE_ANON_KEY || ""
 );
 
 export default function ChallengeLobby() {
@@ -17,6 +18,7 @@ export default function ChallengeLobby() {
   const [copied, setCopied] = useState(false);
   const [isHost, setIsHost] = useState(false);
 
+  // Unique Player ID
   const [userId] = useState(() => {
     let uid = localStorage.getItem("uid");
     if (!uid) {
@@ -26,6 +28,7 @@ export default function ChallengeLobby() {
     return uid;
   });
 
+  // Fetch session & players
   useEffect(() => {
     const fetchLobbyData = async () => {
       if (!sessionId || !userId) return;
@@ -40,14 +43,18 @@ export default function ChallengeLobby() {
         .eq("id", sessionId)
         .single();
 
+      // Assign random deck if none set and user is host
       if (sessionData && !sessionData.deck && sessionData.host_id === userId) {
         const { data: decks } = await supabase.from("shared_decks").select("id");
         const randomDeckId = decks?.[Math.floor(Math.random() * decks.length)]?.id;
         if (randomDeckId) {
-          await supabase.from("challenge_sessions").update({ deck: randomDeckId }).eq("id", sessionId);
+          await supabase.from("challenge_sessions")
+            .update({ deck: randomDeckId })
+            .eq("id", sessionId);
         }
       }
 
+      // Refresh session & players after any potential update
       const { data: refreshedSession } = await supabase
         .from("challenge_sessions")
         .select("*")
@@ -63,6 +70,7 @@ export default function ChallengeLobby() {
       setPlayers(playerData || []);
       setIsHost(refreshedSession?.host_id === userId);
 
+      // Redirect if game already running
       if (refreshedSession.status === "running") {
         navigate(`/challenge/${sessionId}/game`);
       }
@@ -70,6 +78,7 @@ export default function ChallengeLobby() {
 
     fetchLobbyData();
 
+    // Realtime updates
     const channel = supabase.channel(`realtime:lobby:${sessionId}`);
 
     channel.on(
@@ -116,6 +125,7 @@ export default function ChallengeLobby() {
     };
   }, [sessionId, userId, navigate]);
 
+  // Start the game
   const startGame = async () => {
     if (players.length < 2) {
       alert("⚠️ Need at least 2 players to start!");
@@ -132,6 +142,7 @@ export default function ChallengeLobby() {
     }
   };
 
+  // Copy invite link
   const handleCopy = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopied(true);
@@ -141,8 +152,10 @@ export default function ChallengeLobby() {
   return (
     <div className="min-h-screen bg-[#0a0a23] text-white flex flex-col items-center justify-center px-6 py-10">
       <div className="w-full max-w-2xl text-center space-y-8">
+        {/* Title */}
         <h1 className="text-4xl font-bold drop-shadow-lg">⚔️ Challenge Lobby</h1>
 
+        {/* Copy Button */}
         <button
           onClick={handleCopy}
           className="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-5 py-2 rounded-full hover:scale-105 transition-all text-white font-medium shadow-lg"
@@ -151,6 +164,7 @@ export default function ChallengeLobby() {
           {copied ? "Copied!" : "Copy Invite Link"}
         </button>
 
+        {/* Players */}
         <p className="text-slate-400 text-lg">
           👥 {players.length} player{players.length !== 1 && "s"} joined
         </p>
@@ -171,6 +185,7 @@ export default function ChallengeLobby() {
           ))}
         </ul>
 
+        {/* Start Game (Only Host) */}
         {isHost && session?.deck ? (
           <button
             onClick={startGame}
@@ -181,7 +196,7 @@ export default function ChallengeLobby() {
                 : "bg-gray-500 cursor-not-allowed"
             }`}
           >
-            🚀 Start Game
+            Start Game
           </button>
         ) : isHost && !session?.deck ? (
           <p className="text-sm text-red-500">❌ No deck assigned</p>

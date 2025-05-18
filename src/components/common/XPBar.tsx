@@ -1,10 +1,16 @@
 export default function XPBar({ progress, total }: { progress: number; total: number }) {
+  // Calculate percentage progress (safe fallback on 0 total)
   const percent = total === 0 ? 0 : Math.min(100, Math.floor((progress / total) * 100));
+
+  // Total number of visual segments in the bar
   const segmentCount = 20;
+
+  // Number of segments to activate (based on progress %)
   const activeSegments = Math.round((percent / 100) * segmentCount);
 
   return (
     <div className="fixed top-4 left-1/2 -translate-x-1/2 w-64 h-4 z-50">
+      {/* XP bar background container */}
       <div className="w-full h-full bg-white/10 rounded-full shadow-inner backdrop-blur-md flex items-center gap-[2px] px-[2px] overflow-hidden border border-white/10">
         {Array.from({ length: segmentCount }).map((_, i) => (
           <div
@@ -18,7 +24,7 @@ export default function XPBar({ progress, total }: { progress: number; total: nu
         ))}
       </div>
 
-      {/* Glow ring when full */}
+      {/* Special glow ring when XP bar is full */}
       {percent === 100 && (
         <div className="absolute inset-0 rounded-full border-2 border-blue-400/50 animate-pulse pointer-events-none" />
       )}

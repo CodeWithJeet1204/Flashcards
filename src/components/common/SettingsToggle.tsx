@@ -1,25 +1,30 @@
 import { useEffect, useState } from "react";
 
 export default function SettingsToggle() {
+  // Initialize settings from localStorage
   const [glass, setGlass] = useState(() => localStorage.getItem("glass") === "true");
   const [sound, setSound] = useState(() => localStorage.getItem("sound") !== "false");
 
   useEffect(() => {
+    // Keep state in sync across tabs or external changes
     const sync = () => {
       setGlass(localStorage.getItem("glass") === "true");
       setSound(localStorage.getItem("sound") !== "false");
     };
+
     window.addEventListener("storage", sync);
     return () => window.removeEventListener("storage", sync);
   }, []);
 
+  // Toggle Glassmorphism setting
   const toggleGlass = () => {
     const next = !glass;
     localStorage.setItem("glass", next.toString());
     setGlass(next);
-    window.dispatchEvent(new Event("settings-updated"));
+    window.dispatchEvent(new Event("settings-updated")); // Notifies other components
   };
 
+  // Toggle Sound FX setting
   const toggleSound = () => {
     const next = !sound;
     localStorage.setItem("sound", next.toString());
@@ -29,6 +34,8 @@ export default function SettingsToggle() {
 
   return (
     <div className="fixed top-4 left-4 z-50 flex items-center gap-3 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-semibold text-white shadow-xl border border-white/10 animate-[pulse_20s_ease-in-out_infinite]">
+      
+      {/* Blur Toggle */}
       <button
         onClick={toggleGlass}
         className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all duration-200 ${
@@ -38,8 +45,10 @@ export default function SettingsToggle() {
         🧊 Blur: <span>{glass ? "ON" : "OFF"}</span>
       </button>
 
+      {/* Divider */}
       <span className="w-[1px] h-5 bg-white/20" />
 
+      {/* Sound Toggle */}
       <button
         onClick={toggleSound}
         className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all duration-200 ${
@@ -51,3 +60,4 @@ export default function SettingsToggle() {
     </div>
   );
 }
+  

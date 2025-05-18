@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Card } from "../algorithms/spacedRepetition";
+import { Card } from "../../algorithms/spacedRepetition";
 import { v4 as uuidv4 } from "uuid";
 import { createClient } from "@supabase/supabase-js";
 
+// Initialize Supabase client
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
 type Props = {
@@ -11,17 +12,22 @@ type Props = {
 };
 
 export default function DeckGenerator({ onSave, onCancel }: Props) {
+  // State: input + settings
   const [topic, setTopic] = useState("");
   const [difficulty, setDifficulty] = useState("medium");
+
+  // State: results + loading
   const [deck, setDeck] = useState<Card[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Generate deck from OpenAI
   const generateDeck = async () => {
     if (!topic.trim()) return;
     setLoading(true);
     setError("");
 
+    // Prompt for GPT
     const prompt = `
 You are a smart tutor helping generate a flashcard deck.
 
@@ -54,6 +60,7 @@ Strictly return valid JSON array only.
       const data = await res.json();
       const parsed = JSON.parse(data.choices?.[0]?.message?.content || "[]");
 
+      // Transform into Card[]
       const cards: Card[] = parsed.map((item: any) => ({
         id: uuidv4(),
         front: item.front,
@@ -64,6 +71,7 @@ Strictly return valid JSON array only.
 
       setDeck(cards);
 
+      // Store deck in shared_decks for multiplayer use
       await supabase.from("shared_decks").insert({
         topic,
         difficulty,
@@ -72,7 +80,7 @@ Strictly return valid JSON array only.
 
     } catch (err) {
       console.error(err);
-      setError("⚠️ Failed to generate deck. Try again.");
+      setError("Failed to generate deck. Try again.");
     } finally {
       setLoading(false);
     }
@@ -81,9 +89,10 @@ Strictly return valid JSON array only.
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-[#0a0a23] text-white">
       <div className="w-full max-w-2xl bg-white/5 backdrop-blur-md rounded-2xl shadow-2xl p-8 space-y-6">
+
         {/* Header */}
         <div className="flex justify-between items-center">
-          <h2 className="text-3xl font-bold drop-shadow">🧠 AI Deck Generator</h2>
+          <h2 className="text-3xl font-bold drop-shadow">AI Deck Generator</h2>
           <button
             onClick={onCancel}
             className="text-sm text-red-400 hover:text-red-500 font-semibold"
@@ -92,7 +101,7 @@ Strictly return valid JSON array only.
           </button>
         </div>
 
-        {/* Topic input */}
+        {/* Topic Input */}
         <input
           type="text"
           placeholder="Enter topic (e.g., Physics, AI, Marketing...)"
@@ -101,7 +110,7 @@ Strictly return valid JSON array only.
           className="w-full p-3 rounded-xl bg-white/10 text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-orange-400 transition"
         />
 
-        {/* Difficulty */}
+        {/* Difficulty Selector */}
         <select
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
@@ -112,45 +121,40 @@ Strictly return valid JSON array only.
           <option value="hard">Hard</option>
         </select>
 
-        {/* Generate */}
+        {/* Generate Button */}
         <button
           onClick={generateDeck}
           disabled={loading}
           className="w-full py-3 bg-gradient-to-tr from-orange-400 to-orange-600 text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all"
         >
-          {loading ? "⏳ Generating..." : "⚡ Generate Flashcards"}
+          {loading ? "Generating..." : "⚡ Generate Flashcards"}
         </button>
 
-        {/* Error */}
+        {/* Error Display */}
         {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
 
-        {/* Preview */}
+        {/* Preview Cards */}
         {deck.length > 0 && (
           <div className="space-y-4 mt-6">
-            <h3 className="text-xl font-bold">📄 Preview</h3>
+            <h3 className="text-xl font-bold">Preview</h3>
             <div className="max-h-60 overflow-y-auto space-y-3 pr-1">
               {deck.map((card, index) => (
                 <div
                   key={index}
                   className="bg-white/10 backdrop-blur-md p-4 rounded-xl text-sm shadow hover:shadow-orange-500/30 transition"
                 >
-                  <p>
-                    <strong className="text-orange-300">Q:</strong>{" "}
-                    <span className="text-white">{card.front}</span>
-                  </p>
-                  <p>
-                    <strong className="text-blue-300">A:</strong>{" "}
-                    <span className="text-slate-200">{card.back}</span>
-                  </p>
+                  <p><strong className="text-orange-300">Q:</strong> {card.front}</p>
+                  <p><strong className="text-blue-300">A:</strong> {card.back}</p>
                 </div>
               ))}
             </div>
 
+            {/* Save & Review Button */}
             <button
               onClick={() => onSave(deck)}
               className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-full font-bold transition-all"
             >
-              ✅ Save & Start Review
+              Save & Start Review
             </button>
           </div>
         )}

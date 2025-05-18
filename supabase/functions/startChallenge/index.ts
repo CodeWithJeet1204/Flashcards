@@ -19,7 +19,7 @@ serve(async (req) => {
     const session_id = parsed.session_id;
     if (!session_id) throw new Error("❌ Missing session_id in request");
 
-    console.log("✅ Parsed session_id:", session_id);
+    console.log(" Parsed session_id:", session_id);
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -38,7 +38,7 @@ serve(async (req) => {
     if (!session) throw new Error("❌ Session not found");
     if (!session.deck) throw new Error("❌ Session has no deck assigned");
 
-    console.log("✅ Session fetched:", session);
+    console.log(" Session fetched:", session);
 
     // 2️⃣ Validate deck UUID
     if (typeof session.deck !== "string" || !session.deck.match(/^[0-9a-fA-F-]{36}$/)) {
@@ -60,7 +60,7 @@ serve(async (req) => {
       throw new Error("❌ Deck not found or contains no cards");
     }
 
-    console.log(`✅ Deck retrieved with ${hostDeck.cards.length} cards`);
+    console.log(` Deck retrieved with ${hostDeck.cards.length} cards`);
 
     // 4️⃣ Prepare 10 random cards with distractors
     console.log("🎲 Generating quiz deck...");
@@ -97,7 +97,7 @@ serve(async (req) => {
 
     if (updateError) throw updateError;
 
-    console.log("✅ Session updated successfully — Game Started!");
+    console.log(" Session updated successfully — Game Started!");
 
     return new Response(JSON.stringify({ status: "started" }), {
       status: 200,

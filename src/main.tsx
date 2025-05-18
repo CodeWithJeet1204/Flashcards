@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
-import SelectDeck from "./components/SelectDeck";
+import SelectDeck from "./components/deck/SelectDeck";
 
 const path = window.location.pathname;
 

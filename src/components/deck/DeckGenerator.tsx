@@ -87,7 +87,7 @@ Strictly return valid JSON array only.
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-[#0a0a23] text-white">
+    <div className="flex items-center justify-center min-h-screen px-4 bg-white text-black dark:bg-[#0a0a23] dark:text-white transition-colors duration-300">
       <div className="w-full max-w-2xl bg-white/5 backdrop-blur-md rounded-2xl shadow-2xl p-8 space-y-6">
 
         {/* Header */}
@@ -107,14 +107,14 @@ Strictly return valid JSON array only.
           placeholder="Enter topic (e.g., Physics, AI, Marketing...)"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          className="w-full p-3 rounded-xl bg-white/10 text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-orange-400 transition"
+          className="w-full p-3 rounded-xl bg-white/10 placeholder-slate-400 outline-none focus:ring-2 focus:ring-orange-400 transition"
         />
 
         {/* Difficulty Selector */}
         <select
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
-          className="w-full p-3 rounded-xl bg-white/10 text-white focus:ring-2 focus:ring-orange-400 transition"
+          className="w-full p-3 rounded-xl bg-white/10 focus:ring-2 focus:ring-orange-400 transition"
         >
           <option value="easy">Easy</option>
           <option value="medium">Medium (default)</option>
@@ -125,7 +125,7 @@ Strictly return valid JSON array only.
         <button
           onClick={generateDeck}
           disabled={loading}
-          className="w-full py-3 bg-gradient-to-tr from-orange-400 to-orange-600 text-white font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all"
+          className="w-full py-3 bg-gradient-to-tr from-orange-400 to-orange-600 font-bold rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all"
         >
           {loading ? "Generating..." : "⚡ Generate Flashcards"}
         </button>
@@ -152,7 +152,7 @@ Strictly return valid JSON array only.
             {/* Save & Review Button */}
             <button
               onClick={() => onSave(deck)}
-              className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-full font-bold transition-all"
+              className="w-full py-3 bg-green-600 hover:bg-green-700 rounded-full font-bold transition-all"
             >
               Save & Start Review
             </button>

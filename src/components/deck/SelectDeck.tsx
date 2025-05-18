@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 import { Card } from "../../algorithms/spacedRepetition";
-import { Sparkles, FolderPlus } from "lucide-react";
+import { Sparkles, FolderPlus, ChevronLeft } from "lucide-react";
+import ParallaxBackground from "../common/ParallaxBackground";
 
 // Initialize Supabase
 const supabase = createClient(
@@ -55,11 +56,18 @@ export default function SelectDeck() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a23] text-white px-4 py-12 relative">
-      {/* Background Glow Layer */}
-      <div className="fixed inset-0 -z-10 bg-gradient-radial from-[#004aad]/30 via-[#2fb2ff]/10 to-[#002f6e]/40 opacity-40 blur-2xl animate-[pulse_20s_ease-in-out_infinite]" />
+<   div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white px-4 py-12 relative transition-colors duration-300">
+      {/* Background */}
+      <ParallaxBackground />
 
       {/* Header */}
+      {/* Back button */}
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-10 left-4 hover:scale-105 transition-transform"
+      >
+        <ChevronLeft size={28} />
+      </button>
       <div className="text-center mb-14">
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#2fb2ff]/20 text-[#2fb2ff] text-xl shadow-inner">
           <Sparkles />
@@ -87,7 +95,7 @@ export default function SelectDeck() {
             >
               {/* Deck Header */}
               <div className="flex justify-between items-start">
-                <h3 className="text-xl font-bold text-white max-w-[85%] leading-snug">
+                <h3 className="text-xl font-bold max-w-[85%] leading-snug">
                   {deck.topic}
                 </h3>
                 <span
@@ -111,7 +119,7 @@ export default function SelectDeck() {
       <div className="fixed bottom-6 left-6 right-6 sm:left-10 sm:right-10 md:left-20 md:right-20 z-50">
         <button
           onClick={() => navigate("/singleplayer/generator")}
-          className="w-full py-4 bg-gradient-to-tr from-orange-400 to-orange-600 text-white rounded-full shadow-xl hover:scale-105 transition-all text-lg font-bold flex items-center justify-center gap-2"
+          className="w-full py-4 bg-gradient-to-tr from-orange-400 to-orange-600 rounded-full shadow-xl hover:scale-105 transition-all text-lg font-bold flex items-center justify-center gap-2"
         >
           <FolderPlus className="w-5 h-5" /> Generate New Deck
         </button>

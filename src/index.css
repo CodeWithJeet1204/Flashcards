@@ -12,7 +12,23 @@ body {
   font-family: 'Inter', sans-serif;
   -webkit-tap-highlight-color: transparent;
   background-color: theme('colors.slate.50');
+  @apply text-black dark:text-white;
 }
+
+html {
+  @apply text-black;
+}
+
+.dark {
+  @apply text-white;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+
 
 * {
   box-sizing: border-box;

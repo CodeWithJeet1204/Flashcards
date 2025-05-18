@@ -54,13 +54,17 @@ export default function Singleplayer() {
   };
 
   return (
-    <div className="min-h-screen w-screen overflow-hidden bg-[#0a0a23] text-white relative transition-colors duration-700">
+    <div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white px-4 py-12 relative transition-colors duration-300">
 
       {/* Background and global toggles */}
+      
       <ParallaxBackground />
-      <DarkModeToggle />
-      <SettingsToggle />
-      <XPBar progress={reviewed.length} total={cards.length} />
+      {dueCard && (
+        <>
+          <SettingsToggle />
+          <XPBar progress={reviewed.length} total={cards.length} />
+        </>
+      )}
       <OnboardingScreens />
 
       {/* Main content */}
@@ -82,32 +86,28 @@ export default function Singleplayer() {
       ) : (
         <div className="h-screen flex items-center justify-center px-6">
           <div className="bg-white/5 border border-white/10 backdrop-blur-xl p-8 rounded-3xl shadow-xl max-w-md w-full text-center">
-            <h2 className="text-3xl font-extrabold mb-3">All Done!</h2>
-            <p className="text-slate-300 mb-6">
-              You’ve completed this deck. Keep the streak going!
-            </p>
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleReset}
-                className="px-6 py-3 bg-gradient-to-tr from-orange-500 to-red-600 text-white font-bold rounded-full shadow-md hover:scale-105 transition-transform"
+                className="px-6 py-3 bg-gradient-to-tr from-orange-500 to-red-600 font-bold rounded-full shadow-md hover:scale-105 transition-transform"
               >
                 Replay Deck
               </button>
               <button
                 onClick={() => setShowGenerator(true)}
-                className="px-6 py-3 bg-gradient-to-tr from-green-500 to-green-700 text-white font-bold rounded-full shadow-md hover:scale-105 transition-transform"
+                className="px-6 py-3 bg-gradient-to-tr from-green-500 to-green-700 font-bold rounded-full shadow-md hover:scale-105 transition-transform"
               >
                 Generate New Deck
               </button>
               <button
                 onClick={() => navigate("/singleplayer")}
-                className="px-6 py-3 bg-gradient-to-tr from-purple-500 to-purple-700 text-white font-bold rounded-full shadow-md hover:scale-105 transition-transform"
+                className="px-6 py-3 bg-gradient-to-tr from-purple-500 to-purple-700 font-bold rounded-full shadow-md hover:scale-105 transition-transform"
               >
                 Explore Shared Decks
               </button>
               <button
                 onClick={() => navigate("/")}
-                className="px-6 py-3 bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-bold rounded-full shadow-md hover:scale-105 transition-transform"
+                className="px-6 py-3 bg-gradient-to-tr from-blue-500 to-blue-700 font-bold rounded-full shadow-md hover:scale-105 transition-transform"
               >
                 Back to Home
               </button>

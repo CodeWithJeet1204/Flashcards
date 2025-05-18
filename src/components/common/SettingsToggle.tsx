@@ -33,7 +33,7 @@ export default function SettingsToggle() {
   };
 
   return (
-    <div className="fixed top-4 left-4 z-50 flex items-center gap-3 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-semibold text-white shadow-xl border border-white/10 animate-[pulse_20s_ease-in-out_infinite]">
+    <div className="fixed top-24 sm:top-12 right-4 z-50 flex items-center gap-3 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-semibold shadow-xl border border-white/10 animate-[pulse_20s_ease-in-out_infinite]">
       
       {/* Blur Toggle */}
       <button

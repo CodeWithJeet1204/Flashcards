@@ -6,6 +6,7 @@ export interface Card {
   interval: number;
   due: number;
   lastReviewed?: number;
+  favorite?: boolean;
 }
 
 export function initCard(id: number, front: string, back: string): Card {

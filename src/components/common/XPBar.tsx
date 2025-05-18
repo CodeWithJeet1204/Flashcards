@@ -9,7 +9,7 @@ export default function XPBar({ progress, total }: { progress: number; total: nu
   const activeSegments = Math.round((percent / 100) * segmentCount);
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 w-64 h-4 z-50">
+    <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[80vw] max-w-xl h-4 z-50">
       {/* XP bar background container */}
       <div className="w-full h-full bg-white/10 rounded-full shadow-inner backdrop-blur-md flex items-center gap-[2px] px-[2px] overflow-hidden border border-white/10">
         {Array.from({ length: segmentCount }).map((_, i) => (

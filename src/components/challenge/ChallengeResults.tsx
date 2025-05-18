@@ -53,14 +53,14 @@ export default function ChallengeResults() {
   // Show loading message while fetching
   if (loading) {
     return (
-      <p className="text-center mt-10 text-white text-lg">
+      <p className="text-center mt-10 text-lg">
         Calculating scores...
       </p>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a23] text-white flex flex-col items-center justify-center px-6 py-12">
+    <div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white flex flex-col items-center justify-center px-6 py-12 transition-colors duration-300">
       <div className="w-full max-w-2xl space-y-10">
         {/* Title */}
         <h1 className="text-5xl font-bold text-center drop-shadow-lg">
@@ -100,7 +100,7 @@ export default function ChallengeResults() {
         <div className="text-center">
           <button
             onClick={() => navigate("/")}
-            className="mt-6 px-6 py-3 bg-gradient-to-tr from-orange-400 to-orange-600 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform"
+            className="mt-6 px-6 py-3 bg-gradient-to-tr from-orange-400 to-orange-600 font-bold rounded-full shadow-lg hover:scale-105 transition-transform"
           >
             Play Again
           </button>

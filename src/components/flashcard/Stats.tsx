@@ -38,7 +38,7 @@ export default function Stats({ cards }: Props) {
             key={label}
             className="bg-white/5 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-white/10 transition-transform hover:scale-105"
           >
-            <p className="text-4xl font-extrabold text-white">{value}</p>
+            <p className="text-4xl font-extrabold">{value}</p>
             <p className="text-sm text-slate-400 mt-1">{label}</p>
           </div>
         ))}
@@ -50,7 +50,7 @@ export default function Stats({ cards }: Props) {
       </div>
 
       {/* Badge */}
-      <div className="inline-block mt-2 px-5 py-1 text-xs font-bold rounded-full bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow-md animate-[pulse_6s_ease-in-out_infinite]">
+      <div className="inline-block mt-2 px-5 py-1 text-xs font-bold rounded-full bg-gradient-to-r from-orange-400 to-pink-500 shadow-md animate-[pulse_6s_ease-in-out_infinite]">
         {badge}
       </div>
     </div>

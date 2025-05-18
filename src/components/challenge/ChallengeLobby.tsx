@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { createClient, RealtimePostgresChangesPayload } from "@supabase/supabase-js";
-import { ClipboardCopy, Check } from "lucide-react";
+import { ClipboardCopy, Check, ChevronLeft } from "lucide-react";
 
 // Supabase client
 const supabase = createClient(
@@ -150,15 +150,22 @@ export default function ChallengeLobby() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a23] text-white flex flex-col items-center justify-center px-6 py-10">
+    <div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white flex flex-col items-center justify-center px-6 py-10 transition-colors duration-300">
       <div className="w-full max-w-2xl text-center space-y-8">
+        {/* Back button */}
+      <button
+        onClick={() => navigate("/")}
+        className="absolute top-10 left-4 hover:scale-105 transition-transform"
+      >
+        <ChevronLeft size={28} />
+      </button>
         {/* Title */}
         <h1 className="text-4xl font-bold drop-shadow-lg">⚔️ Challenge Lobby</h1>
 
         {/* Copy Button */}
         <button
           onClick={handleCopy}
-          className="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-5 py-2 rounded-full hover:scale-105 transition-all text-white font-medium shadow-lg"
+          className="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-5 py-2 rounded-full hover:scale-105 transition-all font-medium shadow-lg"
         >
           {copied ? <Check size={18} /> : <ClipboardCopy size={18} />}
           {copied ? "Copied!" : "Copy Invite Link"}
@@ -175,7 +182,7 @@ export default function ChallengeLobby() {
               key={p.id}
               className="px-5 py-3 rounded-2xl bg-white/5 backdrop-blur-lg flex justify-between items-center shadow-md"
             >
-              <span className="font-semibold text-white/90">
+              <span className="font-semibold/90">
                 {p.username || `Player #${i + 1}`}
               </span>
               {p.user_id === session?.host_id && (

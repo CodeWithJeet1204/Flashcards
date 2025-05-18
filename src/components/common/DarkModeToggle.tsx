@@ -1,26 +1,39 @@
 import { useEffect, useState } from "react";
 
 export default function DarkModeToggle() {
-  // Check local storage to initialize dark mode
-  const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
+  // Initialize dark mode from local storage
+  const [dark, setDark] = useState(() => {
+    const stored = localStorage.getItem("theme");
+    if (stored) return stored === "dark";
+  
+    // No theme set → default to dark
+    localStorage.setItem("theme", "dark");
+    return true;
+  });
 
-  // For showing quick visual feedback animation
+
   const [animating, setAnimating] = useState(false);
 
-  // Toggle theme and trigger animation
+  // Toggle dark mode
   const toggle = () => {
     setAnimating(true);
-    setDark(prev => !prev);
+    setDark(prev => {
+      const next = !prev;
+      console.log("🌗 Toggling theme:", next ? "dark" : "light");
+      return next;
+    });
     setTimeout(() => setAnimating(false), 800);
   };
 
-  // Apply theme to document root whenever `dark` changes
+  // Apply theme when `dark` changes
   useEffect(() => {
     const root = document.documentElement;
     if (dark) {
+      console.log("🌓 Applying dark mode");
       root.classList.add("dark");
       localStorage.setItem("theme", "dark");
     } else {
+      console.log("🌞 Applying light mode");
       root.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
@@ -29,7 +42,7 @@ export default function DarkModeToggle() {
   return (
     <>
       {/* Toggle Button (Top Right) */}
-      <div className="absolute top-4 right-4 z-50">
+      <div className="absolute top-12 right-4 z-50">
         <button
           onClick={toggle}
           aria-label="Toggle Dark Mode"

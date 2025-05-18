@@ -42,7 +42,7 @@ export default function OnboardingScreens() {
   if (done) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#0a0a23]/90 backdrop-blur-lg flex items-center justify-center px-6">
+    <div className="fixed inset-0 z-50 bg-white/90 dark:bg-[#0a0a23]/90 backdrop-blur-lg flex items-center justify-center px-6 transition-colors duration-300">
       <AnimatePresence mode="wait">
         <motion.div
           key={index}
@@ -50,7 +50,7 @@ export default function OnboardingScreens() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.95 }}
           transition={{ duration: 0.5 }}
-          className="bg-white/10 backdrop-blur-xl text-white p-8 sm:p-10 max-w-md w-full rounded-3xl shadow-2xl border border-white/10 text-center"
+          className="bg-white/10 backdrop-blur-xl p-8 sm:p-10 max-w-md w-full rounded-3xl shadow-2xl border border-white/10 text-center"
         >
           {/* 🧠 Slide Title */}
           <h1 className="text-3xl font-bold mb-4 drop-shadow-md">
@@ -65,7 +65,7 @@ export default function OnboardingScreens() {
           {/* 👉 Next / Start Button */}
           <button
             onClick={next}
-            className="mt-2 px-6 py-3 bg-gradient-to-tr from-orange-400 to-orange-600 text-white rounded-full text-sm font-bold shadow-lg hover:scale-105 transition-transform"
+            className="mt-2 px-6 py-3 bg-gradient-to-tr from-orange-400 to-orange-600 rounded-full text-sm font-bold shadow-lg hover:scale-105 transition-transform"
           >
             {index === screens.length - 1 ? "Start Learning" : "Next →"}
           </button>

@@ -158,11 +158,11 @@ export default function ChallengeGame() {
 
   const current = deck[currentIndex];
   if (!current) {
-    return <p className="text-center mt-10 text-white text-lg">🔄 Loading game...</p>;
+    return <p className="text-center mt-10 text-lg">🔄 Loading game...</p>;
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a23] text-white flex flex-col items-center justify-center px-6 py-10">
+<   div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white flex flex-col items-center justify-center px-6 py-10 transition-colors duration-300">
       <div className="w-full max-w-6xl space-y-8">
         {/* Header */}
         <div className="text-center">
@@ -196,9 +196,9 @@ export default function ChallengeGame() {
             const isWrongSelected = selectedAnswer === opt && !isCorrect;
 
             const base = "py-4 px-5 text-lg font-semibold rounded-full transition-all duration-200";
-            const defaultStyle = "bg-white/10 text-white hover:scale-105 hover:shadow-orange-500/50";
-            const correctStyle = "bg-green-600 text-white";
-            const wrongStyle = "bg-red-500 text-white";
+            const defaultStyle = "bg-white/10 hover:scale-105 hover:shadow-orange-500/50";
+            const correctStyle = "bg-green-600";
+            const wrongStyle = "bg-red-500";
 
             const className = answered
               ? isCorrect

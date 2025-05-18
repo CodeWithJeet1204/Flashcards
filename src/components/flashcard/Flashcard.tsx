@@ -29,6 +29,7 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
   const [sound, setSound] = useState(() => localStorage.getItem("sound") !== "false");
   const [explanation, setExplanation] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(card.favorite ?? false);
 
   // 🧠 Sync blur/sound preferences on mount and updates
   useEffect(() => {
@@ -56,14 +57,6 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
   // 🤏 Gesture support: drag or tap to flip
   const bind = useGesture(
     {
-      onDrag: ({ offset: [x], down, swipe: [swipeX], cancel }) => {
-        if (!revealed) return;
-        api.start({ x: down ? x : 0, scale: down ? 1.05 : 1 });
-        if (!down && swipeX !== 0) {
-          cancel?.();
-          handleReview(swipeX > 0);
-        }
-      },
       onClick: () => {
         if (!revealed) {
           playSound("flip");
@@ -130,9 +123,27 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
     }, 500);
   }
 
+  // ⭐ Toggle Favorite
+  function toggleFavorite(cardId: Card["id"]) {
+    setIsFavorite(!isFavorite);
+
+    const saved = localStorage.getItem("cards");
+    if (!saved) return;
+
+    const parsed: Card[] = JSON.parse(saved);
+    const updated = parsed.map((c) =>
+      c.id === cardId ? { ...c, favorite: !c.favorite } : c
+    );
+
+    localStorage.setItem("cards", JSON.stringify(updated));
+  }
+
+
+
+
   // 🧠 UI
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen pt-24 px-4 relative bg-[#0a0a23] text-white">
+    <div className="flex flex-col justify-start items-center h-full min-h-screen pt-24 px-4 relative bg-white dark:bg-[#0a0a23] text-black dark:text-white overflow-y-auto">
       {/* Background glow feedback */}
       {glow && (
         <div
@@ -156,25 +167,41 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
       {onExit && (
         <button
           onClick={onExit}
-          className="absolute top-16 left-4 z-40 px-5 py-2 text-sm bg-white/10 backdrop-blur-md hover:scale-105 transition rounded-full shadow-md"
+          className="absolute top-12 left-4 z-40 px-5 py-2 text-sm bg-white/10 backdrop-blur-md hover:scale-105 transition rounded-full shadow-md"
         >
-          ← Exit Review
+          ←
         </button>
       )}
 
       {/* Flashcard Animation */}
       <AnimatePresence mode="wait">
-        <animated.div
-          key={card.id + (revealed ? "-back" : "-front")}
-          {...bind()}
-          style={style}
-          className={`z-20 w-full max-w-xl h-80 sm:h-96 md:h-[28rem] flex items-center justify-center text-2xl font-semibold text-center p-6 rounded-3xl transition-all duration-700 cursor-pointer hover:scale-105 shadow-2xl ${
-            glass ? "bg-white/10 backdrop-blur-xl" : "bg-slate-900 border border-white/10"
-          }`}
-        >
-          {revealed ? card.back : card.front}
-        </animated.div>
+        <div className="relative w-full max-w-xl mt-24">
+          {/* ⭐ Favorite Button */}
+          <button
+            onClick={() => toggleFavorite(card.id)}
+            className="absolute -top-4 -right-4 z-30 text-yellow-400 hover:scale-110 active:scale-95 transition-transform bg-white/10 backdrop-blur rounded-full p-4 shadow"
+            title={isFavorite ? "Unfavourite this Card" : "Favourite this Card"}
+          >
+            {isFavorite ? "⭐" : "☆"}
+          </button>
+
+          
+          {/* Flashcard itself */}
+          <animated.div
+            key={card.id + (revealed ? "-back" : "-front")}
+            {...bind()}
+            style={style}
+            className={`z-20 w-full h-80 sm:h-96 md:h-[28rem] flex items-center justify-center text-2xl font-semibold text-center p-6 overflow-y-auto max-h-full break-words scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent rounded-3xl transition-all duration-700 cursor-pointer hover:scale-105 shadow-2xl ${
+              glass
+                ? "bg-white/10 backdrop-blur-xl"
+                : "bg-slate-900 border border-white/10"
+            }`}
+          >
+            {revealed ? card.back : card.front}
+          </animated.div>
+        </div>
       </AnimatePresence>
+
 
       {/* Actions below card */}
       {revealed ? (
@@ -182,13 +209,13 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
           <div className="flex gap-4">
             <button
               onClick={() => handleReview(false)}
-              className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-lg transition-all font-bold"
+              className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-full shadow-lg transition-all font-bold"
             >
               Wrong
             </button>
             <button
               onClick={() => handleReview(true)}
-              className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg transition-all font-bold"
+              className="px-6 py-3 bg-green-500 hover:bg-green-600 rounded-full shadow-lg transition-all font-bold"
             >
               Right
             </button>
@@ -224,7 +251,7 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
             playSound("flip");
             setRevealed(true);
           }}
-          className="z-30 mt-10 px-6 py-3 bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform"
+          className="z-30 mt-10 px-6 py-3 bg-gradient-to-tr from-blue-500 to-blue-700 font-semibold rounded-full shadow-lg hover:scale-105 transition-transform"
         >
           Reveal
         </button>

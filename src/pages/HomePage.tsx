@@ -41,7 +41,7 @@ export default function HomePage() {
 
   return (
     <> 
-    <div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white flex items-center justify-center px-4 relative overflow-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)] text-slate-800 dark:bg-[radial-gradient(ellipse_at_center,_#1a1a40,_#0a0a23)] dark:text-white flex items-center justify-center px-4 relative overflow-hidden transition-colors duration-300">
       {/* Background */}
       <ParallaxBackground />
       
@@ -49,7 +49,7 @@ export default function HomePage() {
 
 
       {/* Main Card */}
-      <div className="z-10 w-full max-w-md px-8 py-10 bg-white/5 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 text-center">
+      <div className="z-10 w-full max-w-md px-8 py-10 bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/5 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 text-center">
 
         {/* Header Section */}
         <div className="mb-6">

@@ -37,7 +37,7 @@ export default function ParallaxBackground() {
       />
 
       {/* Vertical glow streak */}
-      <div className="absolute left-1/2 top-0 w-[1px] h-full bg-sky-300/20 blur-md opacity-40 dark:bg-white/5" />
+      <div className="absolute left-1/2 top-0 w-[1px] h-full bg-sky-300/20 blur-md opacity-40 dark:bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/5" />
     </div>
   );
 }

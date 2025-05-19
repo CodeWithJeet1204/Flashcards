@@ -27,7 +27,7 @@ export default function FavoriteCards() {
   const isEmpty = cards.length === 0;
 
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white px-4 py-10 relative transition-colors duration-300">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)] text-slate-800 dark:bg-[radial-gradient(ellipse_at_center,_#1a1a40,_#0a0a23)] dark:text-white px-4 py-10 relative transition-colors duration-300">
 
       {/* Background */}
       <ParallaxBackground />
@@ -53,7 +53,7 @@ export default function FavoriteCards() {
           {cards.map((card) => (
             <div
               key={card.id}
-              className="bg-white/10 p-4 rounded-xl backdrop-blur shadow-md"
+              className="bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/10 p-4 rounded-xl backdrop-blur shadow-md"
             >
               <p className="font-bold mb-2">{card.front}</p>
               <p className="text-sm text-slate-300">{card.back}</p>

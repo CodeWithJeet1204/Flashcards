@@ -150,7 +150,7 @@ export default function ChallengeLobby() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white flex flex-col items-center justify-center px-6 py-10 transition-colors duration-300">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)] text-slate-800 dark:bg-[radial-gradient(ellipse_at_center,_#1a1a40,_#0a0a23)] dark:text-white flex flex-col items-center justify-center px-6 py-10 transition-colors duration-300">
       <div className="w-full max-w-2xl text-center space-y-8">
         {/* Back button */}
       <button
@@ -165,14 +165,14 @@ export default function ChallengeLobby() {
         {/* Copy Button */}
         <button
           onClick={handleCopy}
-          className="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-5 py-2 rounded-full hover:scale-105 transition-all font-medium shadow-lg"
+          className="inline-flex items-center gap-2 bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/10 backdrop-blur px-5 py-2 rounded-full hover:scale-105 transition-all font-medium shadow-lg"
         >
           {copied ? <Check size={18} /> : <ClipboardCopy size={18} />}
           {copied ? "Copied!" : "Copy Invite Link"}
         </button>
 
         {/* Players */}
-        <p className="text-slate-400 text-lg">
+        <p className="text-slate-1000 text-lg">
           👥 {players.length} player{players.length !== 1 && "s"} joined
         </p>
 
@@ -180,7 +180,7 @@ export default function ChallengeLobby() {
           {players.map((p, i) => (
             <li
               key={p.id}
-              className="px-5 py-3 rounded-2xl bg-white/5 backdrop-blur-lg flex justify-between items-center shadow-md"
+              className="px-5 py-3 rounded-2xl bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/5 backdrop-blur-lg flex justify-between items-center shadow-md"
             >
               <span className="font-semibold/90">
                 {p.username || `Player #${i + 1}`}

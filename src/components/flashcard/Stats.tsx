@@ -36,7 +36,7 @@ export default function Stats({ cards }: Props) {
         ].map(({ label, value }) => (
           <div
             key={label}
-            className="bg-white/5 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-white/10 transition-transform hover:scale-105"
+            className="bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/5 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-white/10 transition-transform hover:scale-105"
           >
             <p className="text-4xl font-extrabold">{value}</p>
             <p className="text-sm text-slate-400 mt-1">{label}</p>
@@ -45,7 +45,7 @@ export default function Stats({ cards }: Props) {
       </div>
 
       {/* Emoji XP Trail */}
-      <div className="text-sm whitespace-nowrap overflow-x-auto scrollbar-hide bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-slate-300 shadow-inner border border-white/10">
+      <div className="text-sm whitespace-nowrap overflow-x-auto scrollbar-hide bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/10 backdrop-blur-md px-4 py-2 rounded-full text-slate-300 shadow-inner border border-white/10">
         {cards.map((c) => getEmojiForCard(c)).join(" ")}
       </div>
 

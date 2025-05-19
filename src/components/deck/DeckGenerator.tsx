@@ -87,8 +87,8 @@ Strictly return valid JSON array only.
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-white text-black dark:bg-[#0a0a23] dark:text-white transition-colors duration-300">
-      <div className="w-full max-w-2xl bg-white/5 backdrop-blur-md rounded-2xl shadow-2xl p-8 space-y-6">
+    <div className="flex items-center justify-center min-h-screen px-4 bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)] text-slate-800 dark:bg-[radial-gradient(ellipse_at_center,_#1a1a40,_#0a0a23)] dark:text-white transition-colors duration-300">
+      <div className="w-full max-w-2xl bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/5 backdrop-blur-md rounded-2xl shadow-2xl p-8 space-y-6">
 
         {/* Header */}
         <div className="flex justify-between items-center">
@@ -107,7 +107,7 @@ Strictly return valid JSON array only.
           placeholder="Enter topic (e.g., Physics, AI, Marketing...)"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          className="w-full p-3 rounded-xl bg-white/10 placeholder-slate-400 outline-none focus:ring-2 focus:ring-orange-400 transition"
+          className="w-full p-3 rounded-xl bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/10 placeholder-slate-400 outline-none focus:ring-2 focus:ring-orange-400 transition"
         />
 
         {/* Difficulty Selector */}
@@ -137,11 +137,11 @@ Strictly return valid JSON array only.
         {deck.length > 0 && (
           <div className="space-y-4 mt-6">
             <h3 className="text-xl font-bold">Preview</h3>
-            <div className="max-h-60 overflow-y-auto space-y-3 pr-1">
+            <div className="max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-[#2fb2ff] scrollbar-track-transparent space-y-3 pr-1">
               {deck.map((card, index) => (
                 <div
                   key={index}
-                  className="bg-white/10 backdrop-blur-md p-4 rounded-xl text-sm shadow hover:shadow-orange-500/30 transition"
+                  className="bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/10 backdrop-blur-md p-4 rounded-xl text-sm shadow hover:shadow-orange-500/30 transition"
                 >
                   <p><strong className="text-orange-300">Q:</strong> {card.front}</p>
                   <p><strong className="text-blue-300">A:</strong> {card.back}</p>

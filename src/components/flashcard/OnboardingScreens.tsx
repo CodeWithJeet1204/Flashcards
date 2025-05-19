@@ -42,7 +42,7 @@ export default function OnboardingScreens() {
   if (done) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-white/90 dark:bg-[#0a0a23]/90 backdrop-blur-lg flex items-center justify-center px-6 transition-colors duration-300">
+    <div className="fixed inset-0 z-50 bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/90 dark:bg-[radial-gradient(ellipse_at_center,_#1a1a40,_#0a0a23)]/90 backdrop-blur-lg flex items-center justify-center px-6 transition-colors duration-300">
       <AnimatePresence mode="wait">
         <motion.div
           key={index}
@@ -50,7 +50,7 @@ export default function OnboardingScreens() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.95 }}
           transition={{ duration: 0.5 }}
-          className="bg-white/10 backdrop-blur-xl p-8 sm:p-10 max-w-md w-full rounded-3xl shadow-2xl border border-white/10 text-center"
+          className="bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/10 backdrop-blur-xl p-8 sm:p-10 max-w-md w-full rounded-3xl shadow-2xl border border-white/10 text-center"
         >
           {/* 🧠 Slide Title */}
           <h1 className="text-3xl font-bold mb-4 drop-shadow-md">

@@ -54,7 +54,7 @@ export default function Singleplayer() {
   };
 
   return (
-    <div className="min-h-screen h-full w-full overflow-hidden bg-white text-black dark:bg-[#0a0a23] dark:text-white px-4 py-12 relative transition-colors duration-300">
+    <div className="min-h-screen h-full w-full overflow-hidden bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)] text-slate-800 dark:bg-[radial-gradient(ellipse_at_center,_#1a1a40,_#0a0a23)] dark:text-white px-4 py-12 relative transition-colors duration-300">
 
       {/* Background and global toggles */}
       
@@ -98,7 +98,7 @@ export default function Singleplayer() {
       />
       ) : (
         <div className="h-screen flex items-center justify-center px-6">
-          <div className="bg-white/5 border border-white/10 backdrop-blur-xl p-8 rounded-3xl shadow-xl max-w-md w-full text-center">
+          <div className="bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/5 border border-white/10 backdrop-blur-xl p-8 rounded-3xl shadow-xl max-w-md w-full text-center">
             <div className="flex flex-col gap-3">
               <button
                 onClick={handleReset}
@@ -116,7 +116,7 @@ export default function Singleplayer() {
                 onClick={() => navigate("/singleplayer")}
                 className="px-6 py-3 bg-gradient-to-tr from-purple-500 to-purple-700 font-bold rounded-full shadow-md hover:scale-105 transition-transform"
               >
-                Explore Shared Decks
+                Explore Decks
               </button>
               <button
                 onClick={() => navigate("/")}

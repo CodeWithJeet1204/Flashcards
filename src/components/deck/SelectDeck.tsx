@@ -56,7 +56,7 @@ export default function SelectDeck() {
   };
 
   return (
-<   div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white px-4 py-12 relative transition-colors duration-300">
+<   div className="min-h-screen bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)] text-slate-800 dark:bg-[radial-gradient(ellipse_at_center,_#1a1a40,_#0a0a23)] dark:text-white px-4 py-12 relative transition-colors duration-300">
       {/* Background */}
       <ParallaxBackground />
 
@@ -91,7 +91,7 @@ export default function SelectDeck() {
             <div
               key={deck.id}
               onClick={() => useDeck(deck)}
-              className="group cursor-pointer p-6 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-orange-500 hover:shadow-[0_0_12px_2px_rgba(255,115,0,0.3)] transition-all duration-300 hover:scale-[1.03] shadow-xl flex flex-col justify-between min-h-[160px]"
+              className="group cursor-pointer p-6 rounded-3xl bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/5 backdrop-blur-xl border border-white/10 hover:border-orange-500 hover:shadow-[0_0_12px_2px_rgba(255,115,0,0.3)] transition-all duration-300 hover:scale-[1.03] shadow-xl flex flex-col justify-between min-h-[160px]"
             >
               {/* Deck Header */}
               <div className="flex justify-between items-start">

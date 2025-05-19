@@ -1,51 +1,57 @@
-/* Tailwind Directives */
+/* ---------------------------------------------
+   🧼 TAILWIND DIRECTIVES
+---------------------------------------------- */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ========== GLOBAL STYLES ========== */
+/* ---------------------------------------------
+   🌐 GLOBAL RESETS & BASE STYLES
+---------------------------------------------- */
 html,
-body {
+body,
+#root {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  height: 100%;
+  overflow-y: auto;
+
   font-family: 'Inter', sans-serif;
   -webkit-tap-highlight-color: transparent;
-  background-color: theme('colors.slate.50');
-  @apply text-black dark:text-white;
-}
 
-html {
-  @apply text-black;
-}
-
-.dark {
-  @apply text-white;
-}
-
-html, body, #root {
-  height: 100%;
-  overflow: hidden;
-}
-
-
-
-* {
-  box-sizing: border-box;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  /* Light Theme Background & Text */
+  background-color: #e3f5ff;
+  color: #1e293b; /* Tailwind slate-800 (soft dark) */
 }
 
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: theme("fontFamily.sans");
+
+  /* fallback in case Tailwind font utility doesn't apply */
+  font-family: theme('fontFamily.sans');
+}
+
+/* Dark Mode Text */
+.dark body {
+  @apply text-white;
+}
+
+/* ---------------------------------------------
+   ✨ ELEMENT DEFAULTS
+---------------------------------------------- */
+* {
+  box-sizing: border-box;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 button {
   @apply transition-all duration-200 ease-in-out;
 }
 
-/* ========== CUSTOM GLOW CLASSES ========== */
+/* ---------------------------------------------
+   💡 CUSTOM GLOW BACKGROUNDS
+---------------------------------------------- */
 .glow-green {
   background: radial-gradient(circle, #4ade80, transparent 70%);
 }
@@ -54,7 +60,9 @@ button {
   background: radial-gradient(circle, #f87171, transparent 70%);
 }
 
-/* ========== CUSTOM ANIMATIONS ========== */
+/* ---------------------------------------------
+   🌀 CUSTOM ANIMATIONS
+---------------------------------------------- */
 @keyframes bounceUp {
   0% {
     transform: translateY(0);
@@ -84,23 +92,30 @@ button {
   animation: tilt 1.2s ease-in-out infinite;
 }
 
-/* ========== CUSTOM UTILITIES ========== */
+/* ---------------------------------------------
+   🧩 CUSTOM UTILITIES (Tailwind Layered)
+---------------------------------------------- */
 @layer utilities {
   .perspective-1000 {
     perspective: 1000px;
   }
+
   .preserve-3d {
     transform-style: preserve-3d;
   }
+
   .rotate-y-180 {
     transform: rotateY(180deg);
   }
+
   .backface-hidden {
     backface-visibility: hidden;
   }
 }
 
-/* ========== COMPONENT STYLES ========== */
+/* ---------------------------------------------
+   🧱 COMPONENT STYLES (Reusable Classes)
+---------------------------------------------- */
 @layer components {
   .card-box {
     @apply rounded-lg shadow-lg bg-white dark:bg-slate-800 dark:text-white p-4;

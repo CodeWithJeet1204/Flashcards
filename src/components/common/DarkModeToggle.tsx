@@ -47,7 +47,7 @@ export default function DarkModeToggle() {
           onClick={toggle}
           aria-label="Toggle Dark Mode"
           title="Toggle Dark Mode"
-          className="w-11 h-11 flex items-center justify-center rounded-full bg-white/20 dark:bg-white/10 text-black dark:text-white shadow-xl backdrop-blur-lg hover:scale-110 active:scale-95 transition-all duration-200"
+          className="w-11 h-11 flex items-center justify-center rounded-full bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/20 dark:bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/10 text-slate-800 dark:text-white shadow-xl backdrop-blur-lg hover:scale-110 active:scale-95 transition-all duration-200"
         >
           <span className="text-xl">{dark ? "☀️" : "🌙"}</span>
         </button>

@@ -27,7 +27,6 @@ export default function ChallengeGame() {
   const channelRef = useRef<any>(null);
   const cleanSessionId = sessionId?.split(":")[0] ?? "";
 
-  // Fetch session data
   useEffect(() => {
     const fetchSession = async () => {
       const { data, error } = await supabase
@@ -46,7 +45,6 @@ export default function ChallengeGame() {
     fetchSession();
   }, [cleanSessionId]);
 
-  // Setup Realtime Presence + Broadcast
   useEffect(() => {
     const setupChannel = async () => {
       const channel = supabase.channel(`challenge:${cleanSessionId}`, {
@@ -79,7 +77,6 @@ export default function ChallengeGame() {
     };
   }, [cleanSessionId, userId]);
 
-  // Countdown Timer Logic
   useEffect(() => {
     if (!cardEndTime) return;
 
@@ -113,7 +110,6 @@ export default function ChallengeGame() {
     return () => clearInterval(interval);
   }, [cardEndTime, currentIndex, cleanSessionId]);
 
-  // Handle Answer Selection
   const handleAnswer = async (selected: string) => {
     if (answered || currentIndex >= deck.length || timeLeft <= 0) return;
     setAnswered(true);
@@ -149,7 +145,6 @@ export default function ChallengeGame() {
     });
   };
 
-  // Redirect to results if deck completed
   useEffect(() => {
     if (deck.length && currentIndex >= deck.length) {
       navigate(`/challenge/${sessionId}/results`);
@@ -162,19 +157,15 @@ export default function ChallengeGame() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white flex flex-col items-center px-6 py-10 overflow-y-auto transition-colors duration-300">
-      <div className="w-full max-w-6xl space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <p className="text-slate-400 text-lg">
-            <Clock className="inline mr-2 w-5 h-5" />
-            Card {currentIndex + 1} / {deck.length}
-          </p>
-          <p className="text-xl font-bold mt-2">
-            ⏱ <span className="text-[#2fb2ff]">{timeLeft > 0 ? `${timeLeft}s` : "0s"}</span>
-          </p>
+    <div className="min-h-screen w-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#2fb2ff] scrollbar-track-transparent bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)] text-slate-800 dark:bg-[radial-gradient(ellipse_at_center,_#1a1a40,_#0a0a23)] dark:text-white flex flex-col items-center px-6 py-10 transition-colors duration-300">
+      <div className="w-full max-w-5xl space-y-12">
+
+        {/* Top HUD */}
+        <div className="flex justify-between text-sm text-slate-500 dark:text-slate-400 font-medium max-w-2xl mx-auto">
+          <span>Card {currentIndex + 1} / {deck.length}</span>
+          <span className="text-[#2fb2ff] font-bold">⏱ {timeLeft}s</span>
         </div>
-  
+
         {/* Question Card */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -183,31 +174,37 @@ export default function ChallengeGame() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.05 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl shadow-xl bg-white/5 backdrop-blur-lg p-8 text-center text-3xl font-bold leading-snug"
+            className="rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-lg p-10 shadow-2xl text-center text-3xl font-bold max-w-2xl mx-auto"
           >
             {current.front}
           </motion.div>
         </AnimatePresence>
-  
+
         {/* Options Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
           {current.options.map((opt: string, i: number) => {
             const isCorrect = opt === current.back;
             const isWrongSelected = selectedAnswer === opt && !isCorrect;
-          
-            const base = "py-4 px-5 text-lg font-semibold rounded-[12px] transition-all duration-200";
-            const defaultStyle = "bg-white/10 hover:scale-105 hover:shadow-orange-500/50";
-            const correctStyle = "bg-green-600";
-            const wrongStyle = "bg-red-500";
-          
-            const className = answered
-              ? isCorrect
-                ? correctStyle
-                : isWrongSelected
-                ? wrongStyle
+
+            const base = "py-4 px-6 text-lg font-semibold rounded-xl transition-all duration-300 text-center disabled:cursor-default";
+            const defaultStyle = "bg-white/20 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:scale-[1.03] hover:shadow-md";
+            const correctStyle = "bg-green-600 text-white";
+            const wrongStyle = "bg-red-500 text-white";
+
+            const className = `
+              ${base}
+              ${answered
+                ? isCorrect
+                  ? correctStyle
+                  : isWrongSelected
+                  ? wrongStyle
+                  : defaultStyle
                 : defaultStyle
-              : defaultStyle;
-          
+              }
+              ${!answered ? "hover:scale-[1.03]" : ""}
+            `;
+
+
             return (
               <motion.button
                 key={i}
@@ -221,7 +218,7 @@ export default function ChallengeGame() {
             );
           })}
         </div>
-        
+
         {/* Feedback */}
         {feedback && (
           <div className="text-center mt-6 text-5xl animate-bounce">{feedback}</div>
@@ -229,5 +226,4 @@ export default function ChallengeGame() {
       </div>
     </div>
   );
-
 }

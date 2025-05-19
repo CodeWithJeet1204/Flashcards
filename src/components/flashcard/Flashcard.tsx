@@ -151,7 +151,7 @@ export default function Flashcard({ card, onReview, onExit, onFavoriteChange }: 
 
 
   return (
-    <div className="min-h-screen h-full w-full overflow-y-auto flex flex-col items-center pt-24 pb-32 px-4 relative bg-white dark:bg-[#0a0a23] text-black dark:text-white">
+    <div className="min-h-screen h-full w-full overflow-y-auto scrollbar-thin scrollbar-thumb-[#2fb2ff] scrollbar-track-transparent flex flex-col items-center pt-24 pb-32 px-4 relative bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)] dark:bg-[radial-gradient(ellipse_at_center,_#1a1a40,_#0a0a23)] text-slate-800 dark:text-white">
 
       {/* Background glow feedback */}
       {glow && (
@@ -176,7 +176,7 @@ export default function Flashcard({ card, onReview, onExit, onFavoriteChange }: 
       {onExit && (
         <button
           onClick={onExit}
-          className="absolute top-12 left-4 z-40 px-5 py-2 text-sm bg-white/10 backdrop-blur-md hover:scale-105 transition rounded-full shadow-md"
+          className="absolute top-12 left-4 z-40 px-5 py-2 text-sm bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/10 backdrop-blur-md hover:scale-105 transition rounded-full shadow-md"
         >
           ←
         </button>
@@ -188,7 +188,7 @@ export default function Flashcard({ card, onReview, onExit, onFavoriteChange }: 
           {/* ⭐ Favorite Button */}
           <button
             onClick={() => toggleFavorite(card.id)}
-            className="absolute -top-4 -right-4 z-30 text-yellow-400 hover:scale-110 active:scale-95 transition-transform bg-white/10 backdrop-blur rounded-full p-4 shadow"
+            className="absolute -top-4 -right-4 z-30 text-yellow-400 hover:scale-110 active:scale-95 transition-transform bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/10 backdrop-blur rounded-full p-4 shadow"
             title={isFavorite ? "Unfavourite this Card" : "Favourite this Card"}
           >
             {isFavorite ? "⭐" : "☆"}
@@ -199,10 +199,10 @@ export default function Flashcard({ card, onReview, onExit, onFavoriteChange }: 
             key={card.id + (revealed ? "-back" : "-front")}
             {...bind()}
             style={style}
-            className={`z-20 w-full h-80 sm:h-96 md:h-[28rem] flex items-center justify-center text-2xl font-semibold text-center p-6 overflow-y-auto break-words rounded-3xl transition-all duration-700 cursor-pointer hover:scale-105 shadow-2xl ${
+            className={`z-20 w-full h-80 sm:h-96 md:h-[28rem] flex items-center justify-center text-2xl font-semibold text-center p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-[#2fb2ff] scrollbar-track-transparent break-words rounded-3xl transition-all duration-700 cursor-pointer hover:scale-105 shadow-2xl ${
               glass
-                ? "bg-white/10 backdrop-blur-xl"
-                : "bg-slate-900 border border-white/10"
+              ? "bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/10 backdrop-blur-xl"
+              : "bg-sky-100 dark:bg-slate-900 border border-white/10"
             }`}
           >
             {revealed ? card.back : card.front}
@@ -241,7 +241,7 @@ export default function Flashcard({ card, onReview, onExit, onFavoriteChange }: 
 
           {explanation && (
             <div className="mt-4 px-4">
-              <div className="bg-white/5 p-4 rounded-xl text-sm text-left shadow-md backdrop-blur">
+              <div className="bg-[radial-gradient(ellipse_at_center,_#e3f5ff,_#ffffff)]/5 p-4 rounded-xl text-sm text-left shadow-md backdrop-blur">
                 {explanation.split("\n").map((line, i) => (
                   <p key={i} className="mb-2 leading-snug">
                     {line}

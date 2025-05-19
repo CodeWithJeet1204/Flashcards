@@ -114,7 +114,7 @@ Strictly return valid JSON array only.
         <select
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
-          className="w-full p-3 rounded-xl bg-white/10 focus:ring-2 focus:ring-orange-400 transition"
+          className="w-full px-4 py-2 text-white bg-slate-800 border border-orange-400 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-orange-500 pr-10"
         >
           <option value="easy">Easy</option>
           <option value="medium">Medium (default)</option>

@@ -11,6 +11,7 @@ type Props = {
   card: Card;
   onReview: (updated: Card) => void;
   onExit?: () => void;
+  onFavoriteChange?: (updated: Card) => void;
 };
 
 // Audio feedback using Howler
@@ -20,7 +21,7 @@ const sounds = {
   fail: new Howl({ src: ["/sounds/fail.mp3"] }),
 };
 
-export default function Flashcard({ card, onReview, onExit }: Props) {
+export default function Flashcard({ card, onReview, onExit, onFavoriteChange }: Props) {
   // 🔄 State: reveal, effects, sound, UX
   const [revealed, setRevealed] = useState(false);
   const [glow, setGlow] = useState("");
@@ -125,25 +126,33 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
 
   // ⭐ Toggle Favorite
   function toggleFavorite(cardId: Card["id"]) {
-    setIsFavorite(!isFavorite);
-
+    const nextFavorite = !isFavorite;
+    setIsFavorite(nextFavorite);
+  
     const saved = localStorage.getItem("cards");
     if (!saved) return;
-
+  
     const parsed: Card[] = JSON.parse(saved);
     const updated = parsed.map((c) =>
-      c.id === cardId ? { ...c, favorite: !c.favorite } : c
+      c.id === cardId ? { ...c, favorite: nextFavorite } : c
     );
-
+  
     localStorage.setItem("cards", JSON.stringify(updated));
+  
+    const changedCard = updated.find((c) => c.id === cardId);
+    if (changedCard && onFavoriteChange) {
+      onFavoriteChange(changedCard); // ✅ Trigger the callback
+    }
+  
+    window.dispatchEvent(new Event("favorites-updated")); // Optional global sync
   }
+  
 
 
 
-
-  // 🧠 UI
   return (
-    <div className="flex flex-col justify-start items-center h-full min-h-screen pt-24 px-4 relative bg-white dark:bg-[#0a0a23] text-black dark:text-white overflow-y-auto">
+    <div className="min-h-screen h-full w-full overflow-y-auto flex flex-col items-center pt-24 pb-32 px-4 relative bg-white dark:bg-[#0a0a23] text-black dark:text-white">
+
       {/* Background glow feedback */}
       {glow && (
         <div
@@ -173,7 +182,7 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
         </button>
       )}
 
-      {/* Flashcard Animation */}
+      {/* Flashcard */}
       <AnimatePresence mode="wait">
         <div className="relative w-full max-w-xl mt-24">
           {/* ⭐ Favorite Button */}
@@ -185,13 +194,12 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
             {isFavorite ? "⭐" : "☆"}
           </button>
 
-          
-          {/* Flashcard itself */}
+          {/* Card body */}
           <animated.div
             key={card.id + (revealed ? "-back" : "-front")}
             {...bind()}
             style={style}
-            className={`z-20 w-full h-80 sm:h-96 md:h-[28rem] flex items-center justify-center text-2xl font-semibold text-center p-6 overflow-y-auto max-h-full break-words scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent rounded-3xl transition-all duration-700 cursor-pointer hover:scale-105 shadow-2xl ${
+            className={`z-20 w-full h-80 sm:h-96 md:h-[28rem] flex items-center justify-center text-2xl font-semibold text-center p-6 overflow-y-auto break-words rounded-3xl transition-all duration-700 cursor-pointer hover:scale-105 shadow-2xl ${
               glass
                 ? "bg-white/10 backdrop-blur-xl"
                 : "bg-slate-900 border border-white/10"
@@ -202,8 +210,7 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
         </div>
       </AnimatePresence>
 
-
-      {/* Actions below card */}
+      {/* Action buttons + Explanation */}
       {revealed ? (
         <div className="z-30 flex flex-col gap-4 mt-10 items-center w-full max-w-xl">
           <div className="flex gap-4">
@@ -221,7 +228,6 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
             </button>
           </div>
 
-          {/* GPT explanation trigger */}
           {!loading && !explanation && (
             <button
               onClick={getExplanation}
@@ -234,7 +240,7 @@ export default function Flashcard({ card, onReview, onExit }: Props) {
           {loading && <p className="text-sm text-slate-400 mt-2">Thinking...</p>}
 
           {explanation && (
-            <div className="mt-4 max-h-40 overflow-y-auto px-4">
+            <div className="mt-4 px-4">
               <div className="bg-white/5 p-4 rounded-xl text-sm text-left shadow-md backdrop-blur">
                 {explanation.split("\n").map((line, i) => (
                   <p key={i} className="mb-2 leading-snug">

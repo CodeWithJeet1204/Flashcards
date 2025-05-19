@@ -8,13 +8,21 @@ export default function FavoriteCards() {
   const [cards, setCards] = useState<Card[]>([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const saved = localStorage.getItem("cards");
-    if (saved) {
-      const parsed: Card[] = JSON.parse(saved);
-      setCards(parsed.filter((c) => c.favorite));
-    }
-  }, []);
+    useEffect(() => {
+      const load = () => {
+        const saved = localStorage.getItem("cards");
+        if (saved) {
+          const parsed: Card[] = JSON.parse(saved);
+          setCards(parsed.filter((c) => c.favorite));
+        }
+      };
+    
+      window.addEventListener("favorites-updated", load);
+      load(); // Initial load
+    
+      return () => window.removeEventListener("favorites-updated", load);
+    }, []);
+
 
   const isEmpty = cards.length === 0;
 

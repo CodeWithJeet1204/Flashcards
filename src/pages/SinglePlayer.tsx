@@ -54,7 +54,7 @@ export default function Singleplayer() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white px-4 py-12 relative transition-colors duration-300">
+    <div className="min-h-screen h-full w-full overflow-hidden bg-white text-black dark:bg-[#0a0a23] dark:text-white px-4 py-12 relative transition-colors duration-300">
 
       {/* Background and global toggles */}
       
@@ -71,7 +71,15 @@ export default function Singleplayer() {
       {showGenerator ? (
         <DeckGenerator
           onSave={(newDeck) => {
-            setCards(newDeck);
+            const saved = localStorage.getItem("cards");
+            const oldCards: Card[] = saved ? JSON.parse(saved) : [];
+          
+            const mergedDeck = newDeck.map((newCard) => {
+              const existing = oldCards.find((c) => c.front === newCard.front);
+              return existing ? { ...newCard, favorite: existing.favorite } : newCard;
+            });
+          
+            setCards(mergedDeck);
             setShowGenerator(false);
             setExited(false);
           }}
@@ -82,7 +90,12 @@ export default function Singleplayer() {
           card={dueCard}
           onReview={handleReview}
           onExit={() => setExited(true)}
-        />
+          onFavoriteChange={(updatedCard) => {
+            setCards((prev) =>
+              prev.map((c) => (c.id === updatedCard.id ? updatedCard : c))
+            );
+          }}
+      />
       ) : (
         <div className="h-screen flex items-center justify-center px-6">
           <div className="bg-white/5 border border-white/10 backdrop-blur-xl p-8 rounded-3xl shadow-xl max-w-md w-full text-center">

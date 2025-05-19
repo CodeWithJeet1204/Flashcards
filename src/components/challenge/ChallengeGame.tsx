@@ -162,7 +162,7 @@ export default function ChallengeGame() {
   }
 
   return (
-<   div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white flex flex-col items-center justify-center px-6 py-10 transition-colors duration-300">
+    <div className="min-h-screen bg-white text-black dark:bg-[#0a0a23] dark:text-white flex flex-col items-center px-6 py-10 overflow-y-auto transition-colors duration-300">
       <div className="w-full max-w-6xl space-y-8">
         {/* Header */}
         <div className="text-center">
@@ -174,7 +174,7 @@ export default function ChallengeGame() {
             ⏱ <span className="text-[#2fb2ff]">{timeLeft > 0 ? `${timeLeft}s` : "0s"}</span>
           </p>
         </div>
-
+  
         {/* Question Card */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -188,18 +188,18 @@ export default function ChallengeGame() {
             {current.front}
           </motion.div>
         </AnimatePresence>
-
+  
         {/* Options Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
           {current.options.map((opt: string, i: number) => {
             const isCorrect = opt === current.back;
             const isWrongSelected = selectedAnswer === opt && !isCorrect;
-
+          
             const base = "py-4 px-5 text-lg font-semibold rounded-[12px] transition-all duration-200";
             const defaultStyle = "bg-white/10 hover:scale-105 hover:shadow-orange-500/50";
             const correctStyle = "bg-green-600";
             const wrongStyle = "bg-red-500";
-
+          
             const className = answered
               ? isCorrect
                 ? correctStyle
@@ -207,7 +207,7 @@ export default function ChallengeGame() {
                 ? wrongStyle
                 : defaultStyle
               : defaultStyle;
-
+          
             return (
               <motion.button
                 key={i}
@@ -221,7 +221,7 @@ export default function ChallengeGame() {
             );
           })}
         </div>
-
+        
         {/* Feedback */}
         {feedback && (
           <div className="text-center mt-6 text-5xl animate-bounce">{feedback}</div>
@@ -229,4 +229,5 @@ export default function ChallengeGame() {
       </div>
     </div>
   );
+
 }
